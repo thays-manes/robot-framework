@@ -1,0 +1,26 @@
+[project]
+name = "robot-framework-sauce-demo"
+version = "1.0.0"
+description = "Automação de testes web com Robot Framework e Browser Library (Playwright)"
+requires-python = ">=3.10,<3.15"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = [".venv", "results"]
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: isort, B: bugbear, UP: pyupgrade, N: pep8-naming, SIM: simplify
+select = ["E", "W", "F", "I", "B", "UP", "N", "SIM"]
+
+# Robocop: lint (robocop check) e formatação (robocop format) dos arquivos .robot/.resource.
+# Usa os padrões da ferramenta: 4 espaços entre células e linhas de até 120 caracteres.
+[tool.robocop]
+exclude = [".venv", "results"]
+
+[tool.robocop.lint]
+# DOC01/DOC02: keywords e cenários têm nomes descritivos em português ("Adicionar Produto Ao Carrinho",
+# "Deve concluir uma compra..."). [Documentation] é usado apenas quando o comportamento não é óbvio.
+# MISC04: a sintaxe VAR (recomendada pelas regras DEPR05/DEPR06) não usa "=", enquanto o retorno de
+# keywords usa "${var}=". As duas formas convivem no Robot Framework 7 e a regra as trata como inconsistência.
+ignore = ["DOC01", "DOC02", "MISC04"]

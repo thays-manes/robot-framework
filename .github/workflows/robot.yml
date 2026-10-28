@@ -1,0 +1,82 @@
+name: Robot Framework Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Ruff
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Robocop
+        run: |
+          robocop check tests resources
+          robocop format --check tests resources
+
+  test:
+    needs: quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    env:
+      TEST_ENV: demo
+      HEADLESS: "true"
+      TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
+      TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
+      TEST_LOCKED_USERNAME: ${{ secrets.TEST_LOCKED_USERNAME }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Install Browser Library and browsers
+        run: |
+          rfbrowser init
+          npx --yes playwright install-deps
+
+      - name: Run tests
+        run: >
+          pabot --processes 2 --argumentfile config/default.args
+          --variable BROWSER:${{ matrix.browser }}
+          --outputdir results/${{ matrix.browser }}
+          tests
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: robot-results-${{ matrix.browser }}
+          path: results/${{ matrix.browser }}
+          retention-days: 14

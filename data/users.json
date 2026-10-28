@@ -1,0 +1,12 @@
+{
+  "standard": {
+    "description": "Usuário com acesso liberado",
+    "username_env": "TEST_USERNAME",
+    "password_env": "TEST_PASSWORD"
+  },
+  "locked_out": {
+    "description": "Usuário bloqueado pela aplicação",
+    "username_env": "TEST_LOCKED_USERNAME",
+    "password_env": "TEST_PASSWORD"
+  }
+}

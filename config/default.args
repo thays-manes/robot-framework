@@ -1,0 +1,4 @@
+--pythonpath .
+--loglevel INFO
+--xunit xunit.xml
+--name Sauce Demo

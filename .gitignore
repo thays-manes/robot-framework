@@ -1,0 +1,34 @@
+# Ambiente virtual e cache do Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.pytest_cache/
+
+# Variáveis de ambiente (nunca versionar credenciais)
+.env
+.env.*
+!.env.example
+
+# Resultados de execução
+results/
+output.xml
+log.html
+report.html
+xunit.xml
+pabot_results/
+.pabotsuitenames
+browser/
+playwright-log.txt
+
+# Temporários e sistema operacional
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/*
+!.vscode/extensions.json
+.idea/

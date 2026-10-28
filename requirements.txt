@@ -1,0 +1,5 @@
+# Dependências para executar os testes
+robotframework==7.5
+robotframework-browser==20.6.0
+robotframework-pabot==5.2.2
+python-dotenv==1.2.4
